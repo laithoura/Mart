@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mart.InstanceClass
+namespace Mart.InstanceClasses
 {
-    class Product
+    public class Product
     {
+
     }
 }

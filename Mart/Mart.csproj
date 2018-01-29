@@ -58,6 +58,7 @@
     <Compile Include="Forms\frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="InstanceClasses\Role.cs" />
     <Compile Include="Intefaces\IFunctionModel.cs" />
     <Compile Include="Intefaces\IMessageType.cs" />
     <Compile Include="UserControls\UBin.cs">
@@ -68,7 +69,7 @@
     </Compile>
     <Compile Include="InstanceClasses\Product.cs" />
     <Compile Include="LocalConnection\Connection.cs" />
-    <Compile Include="InstanceClasses\User.cs" />
+    <Compile Include="InstanceClasses\Employee.cs" />
     <Compile Include="UserControls\UImportStock.cs">
       <SubType>UserControl</SubType>
     </Compile>

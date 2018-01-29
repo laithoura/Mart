@@ -9,18 +9,19 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 
-using Mart.InstanceClass;
 using Mart.UserControls;
 using Mart.Intefaces;
+using Mart.InstanceClasses;
 
 namespace Mart
 {
-    public partial class UUser : UserControl,IFunctionModel<User>,IMessageType
+    public partial class UUser : UserControl,IFunctionModel<Employee>,IMessageType
     {
         private DataTable dt;
         private SqlDataAdapter da;
         private SqlCommand cmd;
         private SqlConnection con = Connection.getConnection();
+        private List<Employee> empList = new List<Employee>();         
 
         private static UUser _instance;
         public static UUser Instance
@@ -36,8 +37,7 @@ namespace Mart
         {
             InitializeComponent();
             LoadData();
-            RegisterEvent();
-            List<User> list = new List<User>();            
+            RegisterEvent();              
         }
 
         private void RegisterEvent()
@@ -50,7 +50,7 @@ namespace Mart
         private void DoClick(object sender, EventArgs e)
         {
             if(sender == btnAdd){
-                User user = new User(0, "Thoura", "Lai", "Male", DateTime.Parse("2000/10/10"), "lait", "1234", 1, true);
+                Employee user = new Employee(0, "Thoura", "Lai", "Male", DateTime.Parse("2000/10/10"), "lait", "1234", new Role(1,""), true);
                 if (Insert(user))
                 {
                     this.MessageSuccess("Inserted successfully", "Insert");
@@ -58,7 +58,7 @@ namespace Mart
                 } else this.MessageError("Inserted Unsuccessfully","Insert");                    
                 
             }else if(sender == btnUpdate){
-                User user = new User(8, "Bora", "Tey", "Female", DateTime.Parse("2011/11/11"), "teyb", "4321", 2, false);
+                Employee user = new Employee(8, "Bora", "Tey", "Female", DateTime.Parse("2011/11/11"), "teyb", "4321", new Role(2, ""), false);
                 if (Update(user))
                 {
                     this.MessageSuccess("Updated successfully", "Update");
@@ -90,10 +90,21 @@ namespace Mart
             try
             {
                 con.Open();
-                this.da = new SqlDataAdapter("Select * from tbUser",con);
-                this.dt = new DataTable();
+                /* Using Stored Procedure */
+                da = new SqlDataAdapter("GetEmployees", con);                
+                dt = new DataTable();
                 da.Fill(dt);
-                dgvUser.DataSource = dt;               
+                dgvUser.DataSource = dt;             
+
+                empList.Clear();
+                /* Convert DataTable to ArrayList */
+                foreach(DataRow row in dt.Rows){
+                    /* If We don't change field name In SELECT STATEMENT 
+                        Employee emp = new Employee((int)row["empID"], (string)row["firstName"], (string)row["lastName"], (string)row["gender"], (DateTime)row["birthDate"], (string)row["username"], (string)row["password"], new Role((int)row["roleID"], (string)row["roleName"]), (bool)row["status"]);
+                    */
+                    Employee emp = new Employee((int)row["Employee ID"], (string)row["First Name"], (string)row["Last Name"], (string)row["Gender"], (DateTime)row["Birth Date"], (string)row["Username"], (string)row["Password"], new Role((int)row["Role ID"], (string)row["Role Name"]), (bool)row["Status"]);
+                    empList.Add(emp);
+                }
             }
             catch (Exception e)
             {
@@ -102,21 +113,21 @@ namespace Mart
             finally { con.Close(); }
         }
   
-        public bool Insert(User user)
+        public bool Insert(Employee emp)
         {
             bool success = false;
             try
             {
                 con.Open();              
                 this.cmd = new SqlCommand("Insert into tbUser(lastName,firstName,gender,birthDate,username,password,roleID,status) Values(@ln,@fn,@g,@bd,@un,@pw,@role,@s)",con);
-                cmd.Parameters.AddWithValue("@ln", user.LastName);
-                cmd.Parameters.AddWithValue("@fn", user.FirstName);
-                cmd.Parameters.AddWithValue("@g", user.Gender);
-                cmd.Parameters.AddWithValue("@bd", user.BirthDate);
-                cmd.Parameters.AddWithValue("@un", user.UserName);
-                cmd.Parameters.AddWithValue("@pw", user.Password);
-                cmd.Parameters.AddWithValue("@role", user.Role);
-                cmd.Parameters.AddWithValue("@s", user.Status);
+                cmd.Parameters.AddWithValue("@ln", emp.LastName);
+                cmd.Parameters.AddWithValue("@fn", emp.FirstName);
+                cmd.Parameters.AddWithValue("@g", emp.Gender);
+                cmd.Parameters.AddWithValue("@bd", emp.BirthDate);
+                cmd.Parameters.AddWithValue("@un", emp.UserName);
+                cmd.Parameters.AddWithValue("@pw", emp.Password);
+                cmd.Parameters.AddWithValue("@role", emp.Roles.ID);
+                cmd.Parameters.AddWithValue("@s", emp.Status);
                 if (cmd.ExecuteNonQuery() > 0) success = true;
             }
             catch (Exception e)
@@ -129,7 +140,7 @@ namespace Mart
             return success;
         }
 
-        public bool Update(User user)
+        public bool Update(Employee user)
         {
             bool success = false;
             try
@@ -142,7 +153,7 @@ namespace Mart
                 cmd.Parameters.AddWithValue("@bd", user.BirthDate);
                 cmd.Parameters.AddWithValue("@un", user.UserName);
                 cmd.Parameters.AddWithValue("@pw", user.Password);
-                cmd.Parameters.AddWithValue("@roleID", user.Role);
+                cmd.Parameters.AddWithValue("@roleID", user.Roles.ID);
                 cmd.Parameters.AddWithValue("@s", user.Status);
                 cmd.Parameters.AddWithValue("@userID",user.ID);
                 if(cmd.ExecuteNonQuery() > 0) success = true;             
@@ -164,7 +175,7 @@ namespace Mart
                 con.Open();
                 cmd = new SqlCommand("DELETE FROM tbUser WHERE userID = @id",con);
                 cmd.Parameters.AddWithValue("@id",id);
-                if (cmd.ExecuteNonQuery() > 0) success = true;               
+                if (cmd.ExecuteNonQuery() == 0) success = true;              
             }
             catch (Exception e)
             {
@@ -172,6 +183,7 @@ namespace Mart
                 success = false;                
             }
             finally { con.Close(); }
+
             return success;
         }
 
