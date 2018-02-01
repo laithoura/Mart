@@ -33,3 +33,4 @@ C:\Users\Thoura Lai\Desktop\Mini-Mart-System-Management\Mart\Mart\obj\Debug\Mart
 C:\Users\Thoura Lai\Desktop\Mini-Mart-System-Management\Mart\Mart\obj\Debug\Mart.UUser.resources
 C:\Users\Thoura Lai\Desktop\Mini-Mart-System-Management\Mart\Mart\obj\Debug\Mart.frmMain.resources
 C:\Users\Thoura Lai\Desktop\Mini-Mart-System-Management\Mart\Mart\obj\Debug\Mart.UserControls.UImportStock.resources
+C:\Users\Thoura Lai\Desktop\Mini-Mart-System-Management\Mart\Mart\obj\Debug\Mart.Forms.frmInsertEmployee.resources

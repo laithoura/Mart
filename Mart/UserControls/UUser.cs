@@ -91,7 +91,7 @@ namespace Mart
             {
                 con.Open();
                 /* Using Stored Procedure */
-                da = new SqlDataAdapter("GetEmployees", con);                
+                da = new SqlDataAdapter("GetActiveEmployees", con);                
                 dt = new DataTable();
                 da.Fill(dt);
                 dgvUser.DataSource = dt;             
@@ -99,10 +99,7 @@ namespace Mart
                 empList.Clear();
                 /* Convert DataTable to ArrayList */
                 foreach(DataRow row in dt.Rows){
-                    /* If We don't change field name In SELECT STATEMENT 
-                        Employee emp = new Employee((int)row["empID"], (string)row["firstName"], (string)row["lastName"], (string)row["gender"], (DateTime)row["birthDate"], (string)row["username"], (string)row["password"], new Role((int)row["roleID"], (string)row["roleName"]), (bool)row["status"]);
-                    */
-                    Employee emp = new Employee((int)row["Employee ID"], (string)row["First Name"], (string)row["Last Name"], (string)row["Gender"], (DateTime)row["Birth Date"], (string)row["Username"], (string)row["Password"], new Role((int)row["Role ID"], (string)row["Role Name"]), (bool)row["Status"]);
+                    Employee emp = new Employee((int)row["empID"], (string)row["firstName"], (string)row["lastName"], (string)row["gender"], (DateTime)row["birthDate"], (string)row["username"], (string)row["password"], new Role((int)row["roleID"], (string)row["roleName"]), (bool)row["status"]);                    
                     empList.Add(emp);
                 }
             }
@@ -119,7 +116,7 @@ namespace Mart
             try
             {
                 con.Open();              
-                this.cmd = new SqlCommand("Insert into tbUser(lastName,firstName,gender,birthDate,username,password,roleID,status) Values(@ln,@fn,@g,@bd,@un,@pw,@role,@s)",con);
+                this.cmd = new SqlCommand("Insert into Employee(lastName,firstName,gender,birthDate,username,password,roleID,status) Values(@ln,@fn,@g,@bd,@un,@pw,@role,@s)",con);
                 cmd.Parameters.AddWithValue("@ln", emp.LastName);
                 cmd.Parameters.AddWithValue("@fn", emp.FirstName);
                 cmd.Parameters.AddWithValue("@g", emp.Gender);
@@ -146,7 +143,7 @@ namespace Mart
             try
             {
                 con.Open();
-                cmd = new SqlCommand("UPDATE tbUser SET lastName = @ln, firstName = @fn, gender = @g, birthDate = @bd, username = @un, password = @pw, roleID = @roleID, status = @s WHERE userID = @userID",con);                
+                cmd = new SqlCommand("UPDATE Employee SET lastName = @ln, firstName = @fn, gender = @g, birthDate = @bd, username = @un, password = @pw, roleID = @roleID, status = @s WHERE empID = @empID", con);                
                 cmd.Parameters.AddWithValue("@ln", user.LastName);
                 cmd.Parameters.AddWithValue("@fn", user.FirstName);
                 cmd.Parameters.AddWithValue("@g", user.Gender);
@@ -155,7 +152,7 @@ namespace Mart
                 cmd.Parameters.AddWithValue("@pw", user.Password);
                 cmd.Parameters.AddWithValue("@roleID", user.Roles.ID);
                 cmd.Parameters.AddWithValue("@s", user.Status);
-                cmd.Parameters.AddWithValue("@userID",user.ID);
+                cmd.Parameters.AddWithValue("@empID",user.ID);
                 if(cmd.ExecuteNonQuery() > 0) success = true;             
             }
             catch (Exception e)
@@ -173,9 +170,9 @@ namespace Mart
             try
             {
                 con.Open();
-                cmd = new SqlCommand("DELETE FROM tbUser WHERE userID = @id",con);
+                cmd = new SqlCommand("DELETE FROM Employee WHERE empID = @id", con);
                 cmd.Parameters.AddWithValue("@id",id);
-                if (cmd.ExecuteNonQuery() == 0) success = true;              
+                if (cmd.ExecuteNonQuery() > 0) success = true;              
             }
             catch (Exception e)
             {

@@ -52,6 +52,12 @@
     <Compile Include="ControlClasses\Controller.cs" />
     <Compile Include="ControlClasses\Exporter.cs" />
     <Compile Include="ControlClasses\Input.cs" />
+    <Compile Include="Forms\frmInsertEmployee.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmInsertEmployee.Designer.cs">
+      <DependentUpon>frmInsertEmployee.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -108,6 +114,9 @@
     <Compile Include="UserControls\UUser.Designer.cs">
       <DependentUpon>UUser.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Forms\frmInsertEmployee.resx">
+      <DependentUpon>frmInsertEmployee.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>
@@ -157,6 +166,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\background-with-different-abstract-shapes_1128-337.jpg" />
+    <None Include="Resources\Entypo_2d%281%29_128.png" />
+    <None Include="Resources\Iconic_2717%280%29_48.png" />
+    <None Include="Resources\no.jpg" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

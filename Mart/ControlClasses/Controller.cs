@@ -8,13 +8,7 @@ using System.Windows.Forms;
 namespace FirstTime
 {
     public class Controller
-    {
-        /*public static void d(DataGridViewColumn col)
-        {
-            DataGridView data = new DataGridView();          
-            col.Resizable = DataGridViewTriState.False;
-        }*/
-
+    {       
         public static void NonSortableDataGridView(DataGridView dgv)
         {
             foreach (DataGridViewColumn col in dgv.Columns)
